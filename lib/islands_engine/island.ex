@@ -4,6 +4,20 @@ defmodule IslandsEngine.Island do
   @enforce_keys [:coordinates, :hit_coordinates]
   defstruct [:coordinates, :hit_coordinates]
 
+  @doc """
+  Creates a new Island for the given island `type` and `upper_left` coordinate.
+
+  ## Examples
+
+      iex> alias IslandsEngine.{Coordinate, Island}
+      iex> {:ok, coordinate} = Coordinate.new(4, 6)
+      iex> {:ok, %Island{}} = Island.new(:l_shape, coordinate)
+      iex> Island.new(:wrong, coordinate)
+      {:error, :invalid_island_type}
+      iex> {:ok, coordinate} = Coordinate.new(10, 10)
+      iex> Island.new(:l_shape, coordinate)
+      {:error, :invalid_coordinate}
+  """
   def new(type, %Coordinate{} = upper_left) do
     with [_ | _] = offsets <- offsets(type),
          %MapSet{} = coordinates <- add_coordinates(offsets, upper_left) do
@@ -36,6 +50,25 @@ defmodule IslandsEngine.Island do
     end
   end
 
+  @doc """
+  Checks if the given islands have any common coordinates.
+
+  ## Examples
+
+      iex> alias IslandsEngine.{Coordinate, Island}
+      iex> {:ok, square_coordinate} = Coordinate.new(1, 1)
+      iex> {:ok, square} = Island.new(:square, square_coordinate)
+      iex> {:ok, dot_coordinate} = Coordinate.new(1, 2)
+      iex> {:ok, dot} = Island.new(:dot, dot_coordinate)
+      iex> {:ok, l_shape_coordinate} = Coordinate.new(5, 5)
+      iex> {:ok, l_shape} = Island.new(:l_shape, l_shape_coordinate)
+      iex> Island.overlaps?(square, dot)
+      true
+      iex> Island.overlaps?(square, l_shape)
+      false
+      iex> Island.overlaps?(dot, l_shape)
+      false
+  """
   def overlaps?(existing_island, new_island),
     do: not MapSet.disjoint?(existing_island.coordinates, new_island.coordinates)
 
