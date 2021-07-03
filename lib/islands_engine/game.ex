@@ -48,6 +48,13 @@ defmodule IslandsEngine.Game do
     {:stop, {:shutdown, :timeout}, state_data}
   end
 
+  def terminate({:shutdown, :timeout}, state_data) do
+    :ets.delete(:game_state, state_data.player1.name)
+    :ok
+  end
+
+  def terminate(_reason, _state), do: :ok
+
   def handle_call({:add_player, name}, _from, state_data) do
     case Rules.check(state_data.rules, :add_player) do
       {:ok, rules} ->

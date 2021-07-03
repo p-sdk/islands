@@ -6,12 +6,13 @@ defmodule IslandsEngine.GameSupervisorTest do
     assert {:ok, game} = GameSupervisor.start_game("Cassatt")
     via = Game.via_tuple("Cassatt")
     assert ^game = GenServer.whereis(via)
-    assert [{:undefined, ^game, :worker, [IslandsEngine.Game]}] =
-             Supervisor.which_children(GameSupervisor)
+    assert [{_name, _state}] = :ets.lookup(:game_state, "Cassatt")
 
     assert :ok = GameSupervisor.stop_game("Cassatt")
+
     assert false == Process.alive?(game)
     assert nil == GenServer.whereis(via)
+    assert [] = :ets.lookup(:game_state, "Cassatt")
   end
 
   test "recovering state after a crash" do
