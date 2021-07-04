@@ -25,6 +25,7 @@ defmodule IslandsEngine.GameTest do
     state_data = :sys.get_state(game)
     assert %{square: _square} = state_data.player1.board
 
+    assert {:error, :overlapping_island} = Game.position_island(game, :player1, :dot, 1, 1)
     assert {:error, :invalid_coordinate} = Game.position_island(game, :player1, :dot, 12, 1)
     assert {:error, :invalid_island_type} = Game.position_island(game, :player1, :wrong, 1, 1)
     assert {:error, :invalid_coordinate} = Game.position_island(game, :player1, :l_shape, 10, 10)
