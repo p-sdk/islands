@@ -2,6 +2,12 @@ defmodule IslandsEngine.Game do
   use GenServer, restart: :transient
   alias IslandsEngine.{Board, Coordinate, Guesses, Island, Rules}
 
+  @on_load :load_atoms
+  defp load_atoms do
+    Code.ensure_loaded(Island)
+    :ok
+  end
+
   @players [:player1, :player2]
   @timeout 60 * 60 * 24 * 1000
 
