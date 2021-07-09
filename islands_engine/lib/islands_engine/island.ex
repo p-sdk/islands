@@ -1,6 +1,7 @@
 defmodule IslandsEngine.Island do
   alias IslandsEngine.{Coordinate, Island}
 
+  @derive Jason.Encoder
   @enforce_keys [:coordinates, :hit_coordinates]
   defstruct [:coordinates, :hit_coordinates]
 
