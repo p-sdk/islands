@@ -23,6 +23,7 @@ defmodule IslandsEngine.MixProject do
   defp deps do
     [
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:jason, "~> 1.2"}
     ]
   end
 end
